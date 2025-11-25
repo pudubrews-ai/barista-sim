@@ -72,11 +72,26 @@ export class Dashboard {
       </div>
 
       <div class="log-panel">
-        <h3>Recent Activity</h3>
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
+            <h3 style="margin: 0;">Recent Activity</h3>
+            <button id="clear-log" style="width: auto; padding: 4px 8px; font-size: 0.7em; margin: 0;">Clear</button>
+        </div>
         <ul class="activity-log">
-          ${s.log.map(msg => `<li>${msg}</li>`).join('')}
+          ${s.log.map(entry => {
+        const currentTotal = (s.time.day * 24 * 60) + (s.time.hour * 60) + s.time.minute;
+        const diff = currentTotal - entry.time;
+        return `<li>
+                <span>${entry.msg}</span>
+                <span style="float: right; color: #666; font-size: 0.8em;">${diff}m ago</span>
+            </li>`;
+      }).join('')}
         </ul>
       </div>
     `;
+
+    // Re-attach clear listener since we re-render
+    document.getElementById('clear-log')?.addEventListener('click', () => {
+      State.update(s => s.clearLog());
+    });
   }
 }

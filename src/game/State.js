@@ -23,12 +23,18 @@ export const State = {
   },
   queue: [], // Array of customers waiting
   activeOrders: [], // Array of { customer, timer } being served
-  log: [], // Array of strings
+  log: [], // Array of { msg: string, time: number }
 
   // Helper to add log message
   addLog(msg) {
-    this.log.unshift(msg);
+    // Calculate total minutes for timestamp
+    const totalMinutes = (this.time.day * 24 * 60) + (this.time.hour * 60) + this.time.minute;
+    this.log.unshift({ msg, time: totalMinutes });
     if (this.log.length > 5) this.log.pop();
+  },
+
+  clearLog() {
+    this.log = [];
   },
 
   time: {
