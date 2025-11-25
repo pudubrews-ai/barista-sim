@@ -63,7 +63,8 @@ export class GameEngine {
     attemptSale(state) {
         // Burst Traffic Logic
         // Max customers depends on reputation (e.g., 100 rep = max 3 customers per tick)
-        const maxCustomers = Math.ceil(state.stats.reputation / 35);
+        // Ensure at least 1 potential customer even at 0 reputation to prevent death spiral
+        const maxCustomers = Math.max(1, Math.ceil(state.stats.reputation / 35));
 
         // Randomly decide how many customers arrive (0 to max)
         // We skew it slightly so 0 is still possible
